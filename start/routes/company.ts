@@ -1,22 +1,22 @@
 import Route from '@ioc:Adonis/Core/Route';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
-import UsersController from 'App/Controllers/Http/UsersController';
+import CompanyController from 'App/Controllers/Http/CompanyController';
 
 Route.group(async () => {
   Route.post('/', (ctx: HttpContextContract) => {
-    return new UsersController().create(ctx);
+    return new CompanyController().create(ctx);
   });
   Route.put('/:id', (ctx: HttpContextContract) => {
-    return new UsersController().update(ctx);
+    return new CompanyController().update(ctx);
   });
   Route.delete('/:id', (ctx: HttpContextContract) => {
-    return new UsersController().destroy(ctx);
+    return new CompanyController().delete(ctx);
   });
   Route.get('/', (ctx: HttpContextContract) => {
-    return new UsersController().findAllRecords(ctx);
+    return new CompanyController().findAllRecords(ctx);
   });
   Route.get('/:id', (ctx: HttpContextContract) => {
-    return new UsersController().findSingleRecord(ctx);
+    return new CompanyController().findSingleRecord(ctx);
   });
 })
-.prefix('/api/v1/users');
+.prefix('/api/v1/company');
