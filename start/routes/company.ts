@@ -18,5 +18,4 @@ Route.group(async () => {
   Route.get('/:id', (ctx: HttpContextContract) => {
     return new CompanyController().findSingleRecord(ctx);
   });
-})
-.prefix('/api/v1/company');
+}).prefix('/api/v1/company');

@@ -33,19 +33,49 @@ const databaseConfig: DatabaseConfig = {
     | npm i mysql2
     |
     */
-    mysql: {
+
+    admin: {
       client: 'mysql2',
       connection: {
-        host: Env.get('MYSQL_HOST'),
-        port: Env.get('MYSQL_PORT'),
-        user: Env.get('MYSQL_USER'),
-        password: Env.get('MYSQL_PASSWORD', ''),
-        database: Env.get('MYSQL_DB_NAME'),
+        host: Env.get('ADMIN_MYSQL_HOST'),
+        port: Env.get('ADMIN_MYSQL_PORT'),
+        user: Env.get('ADMIN_MYSQL_USER'),
+        password: Env.get('ADMIN_MYSQL_PASSWORD', ''),
+        database: Env.get('ADMIN_MYSQL_DB_NAME'),
       },
       migrations: {
+        paths: ['./database/migrations/admin'],
         naturalSort: true,
+        disableRollbacksInProduction: true,
       },
-      healthCheck: false,
+      seeders: {
+        paths: ['./database/seeders/MainSeeder'],
+      },
+      pool: {
+        min: 1,
+        max: 1,
+      },
+      healthCheck: true,
+      debug: false,
+    },
+    tenant: {
+      client: 'mysql2',
+      connection: {
+        host: Env.get('TENANT_MYSQL_HOST'),
+        port: Env.get('TENANT_MYSQL_PORT'),
+        user: Env.get('TENANT_MYSQL_USER'),
+        password: Env.get('TENANT_MYSQL_PASSWORD', ''),
+        database: '',
+      },
+      migrations: {
+        paths: ['./database/migrations/tenant'],
+        naturalSort: true,
+        disableRollbacksInProduction: true,
+      },
+      seeders: {
+        paths: ['./database/seeders/MainSeeder'],
+      },
+      healthCheck: true,
       debug: false,
     },
   },

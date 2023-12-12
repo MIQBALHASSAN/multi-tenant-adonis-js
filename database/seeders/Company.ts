@@ -6,7 +6,8 @@ export default class extends BaseSeeder {
     await Company.createMany([
       {
         company_name: 'company 1',
-        phone: '123456789',
+        db_name: '12345678901',
+        phone: '12345678901',
         address: 'DHA Phase 5',
         city: 'Lahore',
         state: 'Punjab',
@@ -15,7 +16,8 @@ export default class extends BaseSeeder {
       },
       {
         company_name: 'company 2',
-        phone: '123456789',
+        db_name: '12345678902',
+        phone: '12345678902',
         address: 'DHA Phase 5',
         city: 'Lahore',
         state: 'Punjab',
@@ -24,7 +26,8 @@ export default class extends BaseSeeder {
       },
       {
         company_name: 'company 3',
-        phone: '123456789',
+        db_name: '12345678903',
+        phone: '12345678903',
         address: 'DHA Phase 5',
         city: 'Lahore',
         state: 'Punjab',

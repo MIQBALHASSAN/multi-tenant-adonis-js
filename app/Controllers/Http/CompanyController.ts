@@ -1,6 +1,8 @@
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import { BaseController } from 'App/Controllers/BaseController';
 import Company from 'App/Models/Company';
 import HttpCodes from 'App/Enums/HttpCodes';
+import Helper from 'App/Helpers';
 
 export default class CompanyController extends BaseController {
   public MODEL: typeof Company;
@@ -66,22 +68,20 @@ export default class CompanyController extends BaseController {
     }
   }
 
-  // create new company
-  public async create({ request, response }) {
+  public async create({ request, response }: HttpContextContract) {
     try {
-      const DE = await this.MODEL.findBy(
-        'company_name',
-        request.body().company_name
-      );
+      const DE = await this.MODEL.findBy('phone', request.body().phone);
 
       if (DE) {
         return response.conflict({
           code: HttpCodes.CONFLICTS,
-          message: `Company: "${request.body().company_name}" already exists!`,
+          message: `Company: "${request.body().phone}" already exists!`,
         });
       }
+
       const DM = new this.MODEL();
       DM.company_name = request.body().company_name;
+      DM.db_name = `db_${request.body().phone}`;
       DM.phone = request.body().phone;
       DM.status = request.body().status;
       DM.address = request.body().address;
@@ -91,6 +91,8 @@ export default class CompanyController extends BaseController {
       DM.logo = request.body().logo;
 
       const DQ = await DM.save();
+
+      await Helper.generateTenantDB(`db_${request.body().phone}`);
 
       return response.ok({
         code: HttpCodes.SUCCESS,
@@ -106,7 +108,7 @@ export default class CompanyController extends BaseController {
     }
   }
 
-  public async update({ request, response }) {
+  public async update({ request, response }: HttpContextContract) {
     try {
       const DQ = await this.MODEL.findBy('id', request.param('id'));
 
@@ -114,6 +116,14 @@ export default class CompanyController extends BaseController {
         return response.notFound({
           code: HttpCodes.NOT_FOUND,
           message: 'Company does not exists!',
+        });
+      }
+      const DE = await this.MODEL.findBy('phone', request.body().phone);
+
+      if (DE) {
+        return response.conflict({
+          code: HttpCodes.CONFLICTS,
+          message: `Company: "${request.body().phone}" already exists!`,
         });
       }
 
@@ -155,3 +165,41 @@ export default class CompanyController extends BaseController {
     });
   }
 }
+
+// export default class CompanyController {
+//   /**
+//    * @index
+//    * @description Returns array of producs and it's relations
+//    * @responseBody 200 - <Comapny[]>.with(relations)
+//    * @paramUse(sortable, filterable)
+//    * @responseHeader 200 - @use(paginated)
+//    * @responseHeader 200 - X-pages - A description of the header - @example(test)
+//    */
+//   public async index({ request, response }: HttpContextContract) {}
+
+//   /**
+//    * @show
+//    * @paramPath id - Describe the param
+//    * @description Returns a product with it's relation on user and user relations
+//    * @responseBody 200 - <Company>.with(user, user.relations)
+//    * @responseBody 404
+//    */
+//   public async show({ request, response }: HttpContextContract) {}
+
+//   /**
+//    * @update
+//    * @responseBody 200
+//    * @responseBody 404 - Product could not be found
+//    * @requestBody <Company>
+//    */
+//   public async update({ request, response }: HttpContextContract) {}
+
+//   /**
+//    * @create
+//    * @summary Lorem ipsum dolor sit amet
+//    * @paramPath provider - The login provider to be used - @enum(google, facebook, apple)
+//    * @responseBody 200 - {"token": "xxxxxxx"}
+//    * @requestBody {"code": "xxxxxx"}
+//    */
+//   public async create({ request, response }: HttpContextContract) {}
+// }

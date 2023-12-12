@@ -9,6 +9,9 @@ export default class Company extends BaseModel {
   public company_name: string;
 
   @column()
+  public db_name: string;
+
+  @column()
   public phone: string | null;
 
   @column()

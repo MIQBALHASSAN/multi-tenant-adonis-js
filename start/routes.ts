@@ -25,3 +25,4 @@ Route.get('/', async () => {
 });
 
 import './routes/user';
+import './routes/company';
